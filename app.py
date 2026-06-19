@@ -38,12 +38,13 @@ with col_left:
     )
 
 with col_right:
-    video_placeholder = st.empty()
-    if "annotated_video" in st.session_state:
-        video_placeholder.video(st.session_state["annotated_video"])
+    if video_file is not None:
+        st.caption("Uploaded video")
+        st.video(video_file)
 
 # ── Processing ────────────────────────────────────────────────────────────────
 if run_btn and video_file is not None:
+    video_file.seek(0)
     with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as tmp:
         tmp.write(video_file.read())
         tmp_path = tmp.name
@@ -89,7 +90,6 @@ if run_btn and video_file is not None:
                     "excel_bytes":     excel_bytes,
                 }
             )
-            video_placeholder.video(annotated_bytes)
 
     finally:
         try:
@@ -97,7 +97,11 @@ if run_btn and video_file is not None:
         except OSError:
             pass
 
-# ── Results ───────────────────────────────────────────────────────────────────
+# ── Results (rendered after processing so session_state is current) ───────────
+if "annotated_video" in st.session_state:
+    st.subheader("Annotated Video")
+    st.video(st.session_state["annotated_video"])
+
 if "df" in st.session_state:
     st.subheader("Activity Gantt Chart")
     st.pyplot(st.session_state["gantt_fig"])
