@@ -33,7 +33,7 @@ with col_left:
     run_btn = st.button(
         "Analyse Video",
         type="primary",
-        use_container_width=True,
+        width="stretch",
         disabled=video_file is None,
     )
 
@@ -107,7 +107,7 @@ if "df" in st.session_state:
     st.pyplot(st.session_state["gantt_fig"])
 
     st.subheader("Activity Log")
-    st.dataframe(st.session_state["df"], use_container_width=True)
+    st.dataframe(st.session_state["df"], width="stretch")
 
     col_csv, col_excel = st.columns(2)
     with col_csv:
@@ -116,7 +116,7 @@ if "df" in st.session_state:
             data=st.session_state["csv_bytes"],
             file_name="activity_log.csv",
             mime="text/csv",
-            use_container_width=True,
+            width="stretch",
         )
     with col_excel:
         st.download_button(
@@ -124,7 +124,7 @@ if "df" in st.session_state:
             data=st.session_state["excel_bytes"],
             file_name="activity_log.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            use_container_width=True,
+            width="stretch",
         )
 
 st.markdown("---")
