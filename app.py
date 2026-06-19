@@ -5,8 +5,6 @@ import streamlit as st
 
 import inference
 
-REPO_ID = "suphot/motion-study"
-
 st.set_page_config(page_title="MotionStudy — Video Time Study", layout="wide")
 
 st.title("🏃 MotionStudy — Video Time Study Analyser")
@@ -73,16 +71,6 @@ if run_btn and video_file is not None:
             excel_path = inference.save_excel(df)
             gantt_fig  = inference.build_gantt_chart(segments)
 
-            try:
-                prog.progress(0.95, text="Uploading to HF bucket...")
-                inference.upload_to_hf(
-                    [annotated_path, csv_path, excel_path],
-                    ["annotated_video.mp4", "activity_log.csv", "activity_log.xlsx"],
-                    repo_id=REPO_ID,
-                )
-            except Exception as e:
-                st.warning(f"HF upload warning: {e}")
-
             prog.progress(1.0, text="Done.")
 
             with open(annotated_path, "rb") as f:
@@ -139,6 +127,5 @@ st.markdown("---")
 st.markdown(
     "**How it works:** RF-DETR detects the primary person each frame. "
     "Crops are fed into X3D-S (Kinetics-400, 13-frame clips at ~6 fps) to classify the action. "
-    "Activity segments are recorded whenever the top-1 prediction changes (3-frame debounce). "
-    "Results are saved to `suphot/motion-study` on Hugging Face (requires `HF_TOKEN` secret)."
+    "Activity segments are recorded whenever the top-1 prediction changes (3-frame debounce)."
 )

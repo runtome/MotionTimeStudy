@@ -9,4 +9,3 @@ streamlit>=1.27.0
 matplotlib
 pandas
 openpyxl
-huggingface_hub
